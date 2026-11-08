@@ -1,5 +1,6 @@
 import allure
 
+from selenium.webdriver.support.wait import WebDriverWait
 from .base_page import BasePage
 from locators.main_page_locators import MainPageLocators
 from locators.order_feed_page_locators import OrderFeedPageLocators
@@ -56,24 +57,16 @@ class MainPage(BasePage):
         element = self.find_element_with_wait(MainPageLocators.COUNTER_MINERAL_RINGS)
         return element.text
 
-    @allure.step('Создание заказа (авторизованным пользователем)')
-    def create_order(self):
-        self.drag_and_drop_js(MainPageLocators.BUN_KRATOR, MainPageLocators.BURGER_BASKET)
-        self.click_element_with_wait(MainPageLocators.ORDER_BUTTON)
-        self.find_element_with_wait(MainPageLocators.MODAL_ORDER_SUCCESS)
-        self.click_element_with_wait(MainPageLocators.MODAL_CLOSE_BUTTON)
-
     @allure.step('Создание заказа и получение номера заказа')
     def create_order_and_get_number(self):
         self.drag_and_drop_js(MainPageLocators.BUN_KRATOR, MainPageLocators.BURGER_BASKET)
         self.click_element_with_wait(MainPageLocators.ORDER_BUTTON)
         self.find_element_with_wait(MainPageLocators.MODAL_ORDER_SUCCESS)
+        WebDriverWait(self.driver, 10).until(
+            lambda driver: len(self.find_element_with_wait(MainPageLocators.ORDER_NUMBER_TEXT).text.strip()) >= 5
+        )
         order_number = self.find_element_with_wait(MainPageLocators.ORDER_NUMBER_TEXT).text.strip()
         self.click_element_with_wait(MainPageLocators.MODAL_CLOSE_BUTTON)
+        self.wait_for_overlay_invisible()
         return order_number
-
-
-    #@allure.step('Клик по кнопке Личный Кабинет')
-    #def click_constructor_button(self):
-    #    self.click_element_with_wait(MainPageLocators.ACCOUNT_BUTTON)
-
+        

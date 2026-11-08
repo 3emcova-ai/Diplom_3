@@ -11,6 +11,6 @@ class LoginPage(BasePage):
     @allure.step('Вход в личный кабинет')
     def login(self, email, password):
         self.click_element_with_wait(MainPageLocators.ACCOUNT_BUTTON)
-        self.send_keys(LoginPageLocators.EMAIL_INPUT, email)
-        self.send_keys(LoginPageLocators.PASSWORD_INPUT, password)
+        self.send_keys(LoginPageLocators.EMAIL_FIELD, email)
+        self.send_keys(LoginPageLocators.PASSWORD_FIELD, password)
         self.click_element_with_wait(LoginPageLocators.LOGIN_BUTTON)

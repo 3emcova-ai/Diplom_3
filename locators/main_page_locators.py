@@ -21,8 +21,9 @@ class MainPageLocators:
     
     #модальное окно
     MODAL_SAUCE_GALACTIC = (By.XPATH, "//div[contains(@class, 'Modal_modal')]//p[text()='Соус традиционный галактический']")
-    MODAL_ORDER_SUCCESS_ = (By.XPATH, "//div[contains(@class, 'Modal_modal')]//p[contains(text(), 'идентификатор заказа')]")
+    MODAL_ORDER_SUCCESS = (By.XPATH, "//div[contains(@class, 'Modal_modal')]//p[contains(text(), 'идентификатор заказа')]")
     MODAL_CLOSE_BUTTON = (By.XPATH, "//button[contains(@class, 'Modal_modal__close')]")
+    MODAL_OVERLAY = (By.XPATH, "//div[contains(@class, 'Modal_modal_overlay')]")
 
     #создание заказа
     ORDER_BUTTON = (By.XPATH, "//button[text()='Оформить заказ']")

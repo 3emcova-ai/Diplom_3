@@ -14,16 +14,29 @@ class OrderFeedPage(BasePage):
     def get_all_time_counter_value(self):
         element = self.find_element_with_wait(OrderFeedPageLocators.COUNTER_ALL_TIME)
         return int(element.text)
+
+    @allure.step('Ожидание увеличения счетчика Выполнено за все время"')
+    def wait_for_all_time_counter_change(self, old_value):
+        WebDriverWait(self.driver, 15).until(
+            lambda driver: self.get_all_time_counter_value() > old_value
+        )
     
     @allure.step('Получение значения счетчика Выполнено за сегодня')
     def get_today_counter_value(self):
         element = self.find_element_with_wait(OrderFeedPageLocators.COUNTER_TODAY)
         return int(element.text)
 
+    @allure.step('Ожидание увеличения счетчика Выполнено за сегодня')
+    def wait_for_today_counter_change(self, old_value):
+        WebDriverWait(self.driver, 15).until(
+            lambda driver: self.get_today_counter_value() > old_value
+        )
+
     @allure.step('Ожидание появления заказа в разделе "В работе"')
     def wait_order_at_work_section(self, order_number):
         locator = (
-            By.XPATH, f"//ul[contains(@class, 'OrderFeed_orderListReady')]//li[text()='{order_number}']"
+            By.XPATH, 
+            f"//ul[contains(@class, 'OrderFeed_orderListReady')]//li[normalize-space(.)='{order_number}']"
         )
         try:
             WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located(locator))

@@ -18,8 +18,9 @@ class TestOrderFeedPage:
         old_value = order_feed_page.get_all_time_counter_value()
         login_page.login(UserData.EMAIL, UserData.PASSWORD)
         main_page.click_constructor_button()
-        main_page.create_order()
+        main_page.create_order_and_get_number()
         main_page.click_order_feed_button()
+        order_feed_page.wait_for_all_time_counter_change(old_value)
         new_value = order_feed_page.get_all_time_counter_value()
         assert new_value > old_value, "Счетчик 'Выполнено за все время' не увеличился"
 
@@ -34,10 +35,11 @@ class TestOrderFeedPage:
         old_value = order_feed_page.get_today_counter_value()
         login_page.login(UserData.EMAIL, UserData.PASSWORD)
         main_page.click_constructor_button()
-        main_page.create_order()
+        main_page.create_order_and_get_number()
         main_page.click_order_feed_button()
+        order_feed_page.wait_for_today_counter_change(old_value)
         new_value = order_feed_page.get_today_counter_value()
-        assert new_value > old_value, "Счетчик 'Выполнено за сегодня' не увеличился."   
+        assert new_value > old_value, "Счетчик 'Выполнено за сегодня' не увеличился."  
 
     @allure.title('Проверяем появление номера заказа в разделе «В работе»')
     @allure.description('Создаем заказ, запоминаем номер, проверяем отображение в разделе «В работе»')
@@ -47,8 +49,10 @@ class TestOrderFeedPage:
         order_feed_page = OrderFeedPage(driver)
         login_page.login(UserData.EMAIL, UserData.PASSWORD)
         main_page.click_constructor_button()
-        order_number = main_page.create_order_and_get_number()
+        raw_number = main_page.create_order_and_get_number() 
+        formatted_number = f"{int(raw_number):06d}"
         main_page.click_order_feed_button()
         assert main_page.is_order_feed_opened(), "Не удалось открыть Ленту заказов"
-        assert order_feed_page.wait_order_at_work_section(order_number), f"Заказ #{order_number} не появился в разделе 'В работе'"     
-        
+        assert order_feed_page.wait_order_at_work_section(formatted_number), \
+            f"Заказ не появился в разделе 'В работе'"
+              
