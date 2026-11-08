@@ -2,7 +2,7 @@ import allure
 
 from .base_page import BasePage
 from locators.main_page_locators import MainPageLocators
-
+from locators.order_feed_page_locators import OrderFeedPageLocators
 
 class MainPage(BasePage):
     def __init__(self, driver):
@@ -22,7 +22,7 @@ class MainPage(BasePage):
 
     @allure.step('Проверка открытия Ленты заказов')
     def is_order_feed_opened(self):
-        return self.find_element_with_wait(MainPageLocators.ORDER_FEED_TITLE).is_displayed()
+        return self.find_element_with_wait(OrderFeedPageLocators.ORDER_FEED_TITLE).is_displayed()
 
     @allure.step('Клик по табу Соусы')
     def click_sauces_tab(self):
@@ -56,8 +56,21 @@ class MainPage(BasePage):
         element = self.find_element_with_wait(MainPageLocators.COUNTER_MINERAL_RINGS)
         return element.text
 
+    @allure.step('Создание заказа (авторизованным пользователем)')
+    def create_order(self):
+        self.drag_and_drop_js(MainPageLocators.BUN_KRATOR, MainPageLocators.BURGER_BASKET)
+        self.click_element_with_wait(MainPageLocators.ORDER_BUTTON)
+        self.find_element_with_wait(MainPageLocators.MODAL_ORDER_SUCCESS)
+        self.click_element_with_wait(MainPageLocators.MODAL_CLOSE_BUTTON)
 
-
+    @allure.step('Создание заказа и получение номера заказа')
+    def create_order_and_get_number(self):
+        self.drag_and_drop_js(MainPageLocators.BUN_KRATOR, MainPageLocators.BURGER_BASKET)
+        self.click_element_with_wait(MainPageLocators.ORDER_BUTTON)
+        self.find_element_with_wait(MainPageLocators.MODAL_ORDER_SUCCESS)
+        order_number = self.find_element_with_wait(MainPageLocators.ORDER_NUMBER_TEXT).text.strip()
+        self.click_element_with_wait(MainPageLocators.MODAL_CLOSE_BUTTON)
+        return order_number
 
 
     #@allure.step('Клик по кнопке Личный Кабинет')
