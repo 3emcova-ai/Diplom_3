@@ -1,6 +1,5 @@
 import allure
 
-from selenium.webdriver.support.wait import WebDriverWait
 from .base_page import BasePage
 from locators.main_page_locators import MainPageLocators
 from locators.order_feed_page_locators import OrderFeedPageLocators
@@ -62,9 +61,7 @@ class MainPage(BasePage):
         self.drag_and_drop_js(MainPageLocators.BUN_KRATOR, MainPageLocators.BURGER_BASKET)
         self.click_element_with_wait(MainPageLocators.ORDER_BUTTON)
         self.find_element_with_wait(MainPageLocators.MODAL_ORDER_SUCCESS)
-        WebDriverWait(self.driver, 10).until(
-            lambda driver: len(self.find_element_with_wait(MainPageLocators.ORDER_NUMBER_TEXT).text.strip()) >= 5
-        )
+        self.wait_for_text_length(MainPageLocators.ORDER_NUMBER_TEXT, length=5)
         order_number = self.find_element_with_wait(MainPageLocators.ORDER_NUMBER_TEXT).text.strip()
         self.click_element_with_wait(MainPageLocators.MODAL_CLOSE_BUTTON)
         self.wait_for_overlay_invisible()

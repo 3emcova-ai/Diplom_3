@@ -1,6 +1,5 @@
 import allure
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 from .base_page import BasePage
@@ -17,9 +16,7 @@ class OrderFeedPage(BasePage):
 
     @allure.step('Ожидание увеличения счетчика Выполнено за все время"')
     def wait_for_all_time_counter_change(self, old_value):
-        WebDriverWait(self.driver, 15).until(
-            lambda driver: self.get_all_time_counter_value() > old_value
-        )
+        self.wait_counter_change(OrderFeedPageLocators.COUNTER_ALL_TIME, old_value)
     
     @allure.step('Получение значения счетчика Выполнено за сегодня')
     def get_today_counter_value(self):
@@ -28,9 +25,7 @@ class OrderFeedPage(BasePage):
 
     @allure.step('Ожидание увеличения счетчика Выполнено за сегодня')
     def wait_for_today_counter_change(self, old_value):
-        WebDriverWait(self.driver, 15).until(
-            lambda driver: self.get_today_counter_value() > old_value
-        )
+        self.wait_counter_change(OrderFeedPageLocators.COUNTER_TODAY, old_value)
 
     @allure.step('Ожидание появления заказа в разделе "В работе"')
     def wait_order_at_work_section(self, order_number):
@@ -39,8 +34,8 @@ class OrderFeedPage(BasePage):
             f"//ul[contains(@class, 'OrderFeed_orderListReady')]//li[normalize-space(.)='{order_number}']"
         )
         try:
-            WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located(locator))
+            self.find_element_with_wait(locator)
             return True
-        except:
+        except Exception:
             return False
         

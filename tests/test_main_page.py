@@ -1,6 +1,7 @@
 import allure
 
 from pages.main_page import MainPage
+from data import CounterData
 
 
 class TestMainPage:
@@ -44,6 +45,6 @@ class TestMainPage:
     def test_add_ingredient_changes_counter(self, driver):
         main_page = MainPage(driver)
         main_page.drag_mineral_rings_to_basket()
-        assert main_page.get_ingredient_counter_value() == '1', "Счетчик ингредиента не изменился"
+        assert main_page.get_ingredient_counter_value() == CounterData.COUNTER_VALUE_1, "Счетчик ингредиента не изменился"
         main_page.drag_mineral_rings_to_basket()
-        assert main_page.get_ingredient_counter_value() == '2', "Счетчик ингредиента не изменился"
+        assert main_page.get_ingredient_counter_value() == CounterData.COUNTER_VALUE_2, "Счетчик ингредиента не изменился"

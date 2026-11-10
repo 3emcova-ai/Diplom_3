@@ -34,6 +34,7 @@ class BasePage:
         except:
             pass
 
+    @allure.step('Ввод текста в поле')
     def send_keys(self, locator, text):
         field = self.find_element_with_wait(locator)
         try:
@@ -67,3 +68,18 @@ class BasePage:
             evt.initMouseEvent("dragend", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
             source.dispatchEvent(evt);
         """, element_from, element_to)
+
+    @allure.step('Ожидание, пока значение счетчика не станет больше')
+    def wait_counter_change(self, locator, old_value, timeout=15):
+        def condition(driver):
+            element = driver.find_element(*locator)
+            new_value = int(element.text)
+            return new_value > old_value
+        WebDriverWait(self.driver, timeout).until(condition)
+
+    @allure.step('Ожидание, пока длина текста установленной длины')
+    def wait_for_text_length(self, locator, length, timeout=10):
+        def condition(driver):
+            text = driver.find_element(*locator).text.strip()
+            return len(text) >= length
+        WebDriverWait(self.driver, timeout).until(condition)
